@@ -933,7 +933,9 @@ func setGpgInitContainer(resources any, pulp pulpv1.Pulp) corev1.Container {
 	envVars = append(envVars, corev1.EnvVar{Name: "HOME", Value: "/var/lib/pulp"})
 
 	args := []string{
-		`gpg --batch --import /etc/pulp/keys/signing_service.gpg
+		`gpg --list-keys
+echo "auto-expand-secmem 0x100000" > ${HOME}/.gnupg/gpg-agent.conf
+gpg --batch --import /etc/pulp/keys/signing_service.gpg
 echo "${PULP_SIGNING_KEY_FINGERPRINT}:6" | gpg --import-ownertrust
 `,
 	}
