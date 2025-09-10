@@ -927,7 +927,7 @@ func setGpgInitContainer(resources any, pulp repomanagerpulpprojectorgv1beta2.Pu
 		`gpg --list-keys
 echo "auto-expand-secmem 32M" > ${HOME}/.gnupg/gpg-agent.conf
 gpg --batch --import /etc/pulp/keys/signing_service.gpg
-echo "${PULP_SIGNING_KEY_FINGERPRINT}:6" | gpg --import-ownertrust
+for f in $(gpg --list-keys --with-colons | grep -A1 '^pub' | grep '^fpr' | cut -d: -f10); do echo ${f}:6 | gpg --import-ownertrust; done
 `,
 	}
 
